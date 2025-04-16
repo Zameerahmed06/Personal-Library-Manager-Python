@@ -1,0 +1,59 @@
+[
+    {
+      "title": "Deep Dive into Python",
+      "author": "Sara Thompson",
+      "publication_year": 2021,
+      "genre": "Programming",
+      "read_status": false,
+      "added_data": "2025-03-11 12:10:30"
+    },
+    {
+      "title": "The Clean Code Handbook",
+      "author": "Robert Martin",
+      "publication_year": 2008,
+      "genre": "Software Engineering",
+      "read_status": true,
+      "added_data": "2025-03-11 12:12:45"
+    },
+    {
+      "title": "Mastering Algorithms with Python",
+      "author": "Magnus Lie Hetland",
+      "publication_year": 2016,
+      "genre": "Data Structures",
+      "read_status": false,
+      "added_data": "2025-03-11 12:15:10"
+    },
+    {
+      "title": "Learning Python the Fun Way",
+      "author": "Amina Qureshi",
+      "publication_year": 2023,
+      "genre": "Education",
+      "read_status": true,
+      "added_data": "2025-03-11 12:18:00"
+    },
+    {
+      "title": "Advanced Python Tricks",
+      "author": "Liam Patel",
+      "publication_year": 2020,
+      "genre": "Programming",
+      "read_status": false,
+      "added_data": "2025-03-11 12:20:55"
+    },
+    {
+      "title": "Think Python",
+      "author": "Allen B. Downey",
+      "publication_year": 2015,
+      "genre": "Programming",
+      "read_status": true,
+      "added_data": "2025-03-11 12:22:40"
+    },
+    {
+      "title": "The Pythonic Way",
+      "author": "Zameer Ahmed",
+      "publication_year": 2024,
+      "genre": "Programming",
+      "read_status": false,
+      "added_data": "2025-03-11 12:25:00"
+    }
+  ]
+  
