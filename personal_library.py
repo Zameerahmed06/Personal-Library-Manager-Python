@@ -10,10 +10,10 @@ import plotly.graph_objects as go
 from streamlit_lottie import st_lottie
 import requests
 
-# Set page configuration with new favicon
+# Set page configuration
 st.set_page_config(
     page_title="Personal Library Manager",
-    page_icon="🏛️",
+    page_icon="📚",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -277,7 +277,7 @@ def create_visualizations(stats):
 load_library()
 
 # Sidebar navigation
-st.sidebar.markdown("<h1 style='text-align: center;'>🧭 Quick Menu</h1>", unsafe_allow_html=True)
+st.sidebar.markdown("<h1 style='text-align: center;'>📚 Navigation</h1>", unsafe_allow_html=True)
 
 # Display lottie animation in sidebar
 lottie_book = load_lottieurl("https://assets9.lottiefiles.com/temp/lf20_aKAfIn.json")
@@ -288,26 +288,26 @@ if lottie_book:
 # Navigation options
 nav_options = st.sidebar.radio(
     "Choose an option:",
-    ["📘 View Library", "✍️ Add Book", "🧭 Search Books", "📈 Library Statistics"]
+    ["View Library", "Add Book", "Search Books", "Library Statistics"]
 )
 
 # Change current view based on navigation
-if nav_options.endswith("View Library"):
+if nav_options == "View Library":
     st.session_state.current_view = "library"
-elif nav_options.endswith("Add Book"):
+elif nav_options == "Add Book":
     st.session_state.current_view = "add"
-elif nav_options.endswith("Search Books"):
+elif nav_options == "Search Books":
     st.session_state.current_view = "search"
-elif nav_options.endswith("Library Statistics"):
+elif nav_options == "Library Statistics":
     st.session_state.current_view = "stats"
 
 
 # Application header
-st.markdown("<h1 class='main-header'>🏛️ Personal Library Manager</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-header'>📚 Personal Library Manager</h1>", unsafe_allow_html=True)
+
 # Handle views based on current selection
 if st.session_state.current_view == "add":
-    st.markdown("<h2 class='sub-header'>✍️ Add a New Book</h2>", unsafe_allow_html=True)
-
+    st.markdown("<h2 class='sub-header'>📝 Add a New Book</h2>", unsafe_allow_html=True)
     
     # Input form for adding books
     with st.form(key='add_book_form'):
@@ -339,9 +339,8 @@ if st.session_state.current_view == "add":
         st.balloons()  # Show celebration balloons
         st.session_state.book_added = False
 
-
 elif st.session_state.current_view == "library":
-    st.markdown("<h2 class='sub-header'>📘 Your Library</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='sub-header'>📖 Your Library</h2>", unsafe_allow_html=True)
     
     if not st.session_state.library:
         st.markdown("<div class='warning-message'>Your library is empty. Add some books to get started!</div>", unsafe_allow_html=True)
@@ -382,7 +381,7 @@ elif st.session_state.current_view == "library":
         st.session_state.book_removed = False
 
 elif st.session_state.current_view == "search":
-    st.markdown("<h2 class='sub-header'>🧭 Search Books</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='sub-header'>🔍 Search Books</h2>", unsafe_allow_html=True)
   
     # Search options
     search_by = st.selectbox("Search by:", ["Title", "Author", "Genre"])
@@ -414,7 +413,7 @@ elif st.session_state.current_view == "search":
             st.markdown("<div class='warning-message'>No books found matching your search criteria.</div>", unsafe_allow_html=True)
 
 elif st.session_state.current_view == "stats":
-    st.markdown("<h2 class='sub-header'>📈 Library Statistics</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='sub-header'>📊 Library Statistics</h2>", unsafe_allow_html=True)
     
     if not st.session_state.library:
         st.markdown("<div class='warning-message'>Your library is empty. Add some books to see statistics!</div>", unsafe_allow_html=True)
