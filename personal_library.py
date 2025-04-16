@@ -18,8 +18,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-
-# Custom CSS for styling with updated icons
+# Custom CSS for styling
 st.markdown("""
 <style>
     .main-header {
@@ -68,8 +67,6 @@ st.markdown("""
         border-radius: 1rem;
         font-size: 0.875rem;
         font-weight: 600;
-        display: inline-flex;
-        align-items: center;
     }
     .unread-badge {
         background-color: #F87171;
@@ -78,8 +75,6 @@ st.markdown("""
         border-radius: 1rem;
         font-size: 0.875rem;
         font-weight: 600;
-        display: inline-flex;
-        align-items: center;
     }
     .action-button {
         margin-right: 0.5rem;
@@ -276,6 +271,8 @@ def create_visualizations(stats):
         )
         st.plotly_chart(fig_decades, use_container_width=True)
 
+
+
 # Load library data on app start
 load_library()
 
@@ -303,6 +300,7 @@ elif nav_options == "Search Books":
     st.session_state.current_view = "search"
 elif nav_options == "Library Statistics":
     st.session_state.current_view = "stats"
+
 
 # Application header
 st.markdown("<h1 class='main-header'>📚 Personal Library Manager</h1>", unsafe_allow_html=True)
@@ -362,22 +360,86 @@ elif st.session_state.current_view == "library":
                         "Read" if book["read_status"] else "Unread"}</span></p>
                 </div>
                 """, unsafe_allow_html=True)
+                
+                # Action buttons
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.button(f"Remove", key=f"remove_{i}", use_container_width=True):
+                        if remove_book(i):
+                            st.rerun()
+                with col2:
+                    new_status = not book['read_status']
+                    status_label = "Mark as Read" if not book['read_status'] else "Mark as Unread"
+                    if st.button(status_label, key=f"status_{i}", use_container_width=True):
+                        st.session_state.library[i]['read_status'] = new_status
+                        save_library()
+                        st.rerun()
+    
+    # Display success message if book was removed
+    if st.session_state.book_removed:
+        st.markdown("<div class='success-message'>Book removed successfully!</div>", unsafe_allow_html=True)
+        st.session_state.book_removed = False
 
 elif st.session_state.current_view == "search":
     st.markdown("<h2 class='sub-header'>🔍 Search Books</h2>", unsafe_allow_html=True)
-    search_term = st.text_input("Search for books:")
-    search_by = st.selectbox("Search by", ["Title", "Author", "Genre"])
-
-    if st.button("Search"):
-        search_books(search_term, search_by)
+  
+    # Search options
+    search_by = st.selectbox("Search by:", ["Title", "Author", "Genre"])
+    search_term = st.text_input("Enter search term:")
+    
+    if st.button("Search", use_container_width=False):
+        if search_term:
+            with st.spinner('Searching...'):
+                time.sleep(0.5)  # Slight delay for animation effect
+                search_books(search_term, search_by)
+    
+    # Display search results
+    if hasattr(st.session_state, 'search_results'):
         if st.session_state.search_results:
-            for book in st.session_state.search_results:
-                st.write(f"{book['title']} by {book['author']}")
-        else:
-            st.write("No results found.")
+            st.markdown(f"<h3>Found {len(st.session_state.search_results)} results:</h3>", unsafe_allow_html=True)
+            
+            for i, book in enumerate(st.session_state.search_results):
+                st.markdown(f"""
+                <div class='book-card'>
+                    <h3>{book['title']}</h3>
+                    <p><strong>Author:</strong> {book['author']}</p>
+                    <p><strong>Publication Year:</strong> {book['publication_year']}</p>
+                    <p><strong>Genre:</strong> {book['genre']}</p>
+                    <p><span class='{"read-badge" if book["read_status"] else "unread-badge"}'>{
+                        "Read" if book["read_status"] else "Unread"}</span></p>
+                </div>
+                """, unsafe_allow_html=True)
+        elif search_term:
+            st.markdown("<div class='warning-message'>No books found matching your search criteria.</div>", unsafe_allow_html=True)
 
 elif st.session_state.current_view == "stats":
     st.markdown("<h2 class='sub-header'>📊 Library Statistics</h2>", unsafe_allow_html=True)
     
-    stats = get_library_stats()
-    create_visualizations(stats)
+    if not st.session_state.library:
+        st.markdown("<div class='warning-message'>Your library is empty. Add some books to see statistics!</div>", unsafe_allow_html=True)
+    else:
+        # Get library statistics
+        stats = get_library_stats()
+        
+        # Display summary statistics
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Total Books", stats['total_books'])
+        with col2:
+            st.metric("Books Read", stats['read_books'])
+        with col3:
+            st.metric("Percentage Read", f"{stats['percent_read']:.1f}%")
+        
+        # Create visualizations
+        create_visualizations(stats)
+        
+        # Display top authors
+        if stats['authors']:
+            st.markdown("<h3>Top Authors</h3>", unsafe_allow_html=True)
+            top_authors = dict(list(stats['authors'].items())[:5])
+            for author, count in top_authors.items():
+                st.markdown(f"**{author}**: {count} book{'s' if count > 1 else ''}")
+
+# Footer
+st.markdown("---")
+st.markdown("© 2025 Zameer Ahmed Personal Library Manager | Created with Love and Streamlit", unsafe_allow_html=True)
