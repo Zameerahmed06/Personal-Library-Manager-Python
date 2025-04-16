@@ -10,13 +10,14 @@ import plotly.graph_objects as go
 from streamlit_lottie import st_lottie
 import requests
 
-# Set page configuration with updated favicon
+# Set page configuration
 st.set_page_config(
     page_title="Personal Library Manager",
-    page_icon="https://your-new-favicon-url.png",  # Replace with your desired favicon URL
+    page_icon="📚",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
 
 # Custom CSS for styling with updated icons
 st.markdown("""
